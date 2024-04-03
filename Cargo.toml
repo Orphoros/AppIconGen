@@ -1,0 +1,20 @@
+[package]
+name = "app_icon_gen"
+version = "0.0.1"
+edition = "2021"
+description = "App icon generator for Windows, Linux and macOS"
+authors = ["Orphoros <contact@orphoros.com>"]
+license = "GPL-3.0"
+
+[dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
+icns = "0.3.1"
+ico-builder = "0.1.0"
+image = "0.25.0"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "z"
+strip = true
