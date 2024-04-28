@@ -36,6 +36,8 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
+    let all_flags = !args.ico && !args.icns && !args.dump && !args.tray;
+
     let img = ImageReader::open(&args.path);
     if img.is_err() {
         eprintln!("Error: Failed to open the image file.");
@@ -63,7 +65,7 @@ fn main() {
         return;
     }
 
-    if args.tray {
+    if args.tray || all_flags{
         let resized = input_img.resize(512, 512, image::imageops::FilterType::Lanczos3);
         let mut resized = resized.to_rgba8();
         for pixel in resized.pixels_mut() {
@@ -127,7 +129,7 @@ fn main() {
         }
     }
 
-    if args.icns {
+    if args.icns || all_flags {
         let mut icon_family = IconFamily::new();
         for (icon_type, img) in icns_images.iter() {
             let buffer = img.to_rgba8().into_raw();
@@ -142,7 +144,7 @@ fn main() {
         icon_family.write(file).unwrap();
     }
 
-    if args.ico {
+    if args.ico || all_flags {
         IcoBuilder::default()
         .sizes(&[16, 32, 48, 96, 256])
         .add_source_file(&args.path)
