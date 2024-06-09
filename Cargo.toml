@@ -1,5 +1,5 @@
 [package]
-name = "app_icon_gen"
+name = "appicongen"
 version = "0.0.1"
 edition = "2021"
 description = "App icon generator for Windows, Linux and macOS"
