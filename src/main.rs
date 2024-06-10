@@ -1,9 +1,5 @@
-use std::collections::HashMap;
-
 use clap::Parser;
-use icon_gen::{helpers::{dump_images, generate_images}, icns::build_icns, ico::build_ico, tray::build_tray};
-use image::{io::Reader as ImageReader, DynamicImage};
-use icns::IconType;
+use image::io::Reader as ImageReader;
 
 mod icon_gen;
 
@@ -67,25 +63,21 @@ fn main() {
         return;
     }
 
+    let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(&args.out, &input_img, &args.path);
+
     if args.tray || all_flags{
-        build_tray(&input_img, &args.out);
-    }
-
-    let mut icns_images: HashMap<IconType, DynamicImage> = HashMap::new();
-
-    if args.dump && args.icns {
-        icns_images = generate_images(&input_img);
+        app_image_builder.build_tray();
     }
 
     if args.dump {
-        dump_images(&icns_images, &args.out);
+        app_image_builder.dump_images();
     }
 
     if args.icns || all_flags {
-        build_icns(&icns_images, &args.out);
+        app_image_builder.build_icns();
     }
 
     if args.ico || all_flags {
-        build_ico(&args.path, &args.out);
+        app_image_builder.build_ico();
     }
 }
