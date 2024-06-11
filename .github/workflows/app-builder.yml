@@ -1,12 +1,14 @@
 name: Release
+permissions:
+  contents: write
 on:
   push:
     tags:
       - "v*"
   workflow_dispatch:
-
 jobs:
   create-release:
+    name: Create release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,6 +21,7 @@ jobs:
           allow-missing-changelog: true
           title: "[Alpha] AppIconGen CLI $tag"
   upload-assets:
+    name: Upload assets
     needs: create-release
     strategy:
       matrix:
