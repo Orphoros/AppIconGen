@@ -18,7 +18,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
-          allow-missing-changelog: true
+          allow-missing-changelog: false
+          changelog: CHANGELOG.md
           title: "[Alpha] AppIconGen CLI $tag"
   upload-assets:
     name: Upload assets
