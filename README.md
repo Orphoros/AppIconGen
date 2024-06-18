@@ -13,7 +13,7 @@ AppIconGen is a CLI tool that generates various image formats for application so
 
 The input file must be a single PNG file with a resolution of `1024x1024` pixels or greater. This CLI tool can generate the following images:
 
-| Icon Type | File Format | Resolution | Usage |
+| Icon Type | File Format | Default Resolution | Usage |
 | --------- | ---------- | ---------------- | ----- |
 | `ICNS`    | .icns      | `16x16`, `32x32`, `128x128`, `256x256`, `512x512`, `16x16@2x`, `32x32@2x`, `128x128@2x`, `256x256@2x`, `512x512@2x` |macOS application icon |
 | `ICO`     | .ico       | `16x16`, `32x32`, `48x48`, `96x96`, `256x256` | Windows application icon or website favicon |
@@ -39,6 +39,12 @@ By default, the tool generates all the image formats. To generate only specific 
 
 ```sh
 appicongen -i -t icon.png
+```
+
+Optionally, the `-r` flag can be used to specify what resolutions to generate for the ICO file:
+
+```sh
+appicongen -i -r "16,32,48,256" icon.png
 ```
 
 If no input file is specified, AppIconGen will look for a file named `icon.png` in the current directory.
