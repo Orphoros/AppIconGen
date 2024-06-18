@@ -20,7 +20,7 @@ jobs:
           draft: true
           allow-missing-changelog: false
           changelog: CHANGELOG.md
-          title: "[Alpha] AppIconGen CLI $tag"
+          title: "AppIconGen CLI $tag"
   upload-assets:
     name: Upload assets
     needs: create-release

@@ -6,9 +6,6 @@
 
 AppIconGen is a CLI tool that generates various image formats for application software icons from a single PNG image file. The tool is designed to be used as a part of a build process for software development projects.
 
-> [!NOTE]
-> AppIconGen is currently in development and is only available for testing purposes as an alpha release.
-
 ## Features
 
 The input file must be a single PNG file with a resolution of `1024x1024` pixels or greater. This CLI tool can generate the following images:

@@ -5,7 +5,12 @@ mod icon_gen;
 mod macros;
 
 #[derive(Parser, Debug)]
-#[command(name = "appicongen", version, about, after_help = "Make sure that the input PNG image is square and has a resolution of at least 1024x1024 pixels.")]
+#[command(
+    name = "appicongen",
+    version,
+    about = "Universal application icon generator",
+    after_help = "Make sure that the input PNG image is square and has a resolution of at least 1024x1024 pixels."
+)]
 struct Args {
     /// Name and path of the output file without extension
     #[arg(short, long, default_value = "appicon")]
