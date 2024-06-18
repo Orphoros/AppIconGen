@@ -30,6 +30,10 @@ struct Args {
     #[arg(short, long, default_value = "false")]
     tray: bool,
 
+    /// Resolution for the tray PNG file
+    #[arg(short = 'T', long, default_value = "512")]
+    tray_resolution: u32,
+
     /// Path to the PNG image
     #[clap(default_value = "icon.png")]
     path: String,
@@ -64,6 +68,11 @@ fn main() {
         return;
     }
 
+    if args.tray_resolution < 16 || args.tray_resolution > 2048 {
+        eprintln!("Error: The resolution for the tray PNG file is out of bounds (16-2048).");
+        return;
+    }
+
     let img = ImageReader::open(&args.path);
     if img.is_err() {
         eprintln!("Error: Failed to open the image file '{}'.", args.path);
@@ -91,7 +100,9 @@ fn main() {
         return;
     }
 
-    let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(&args.out, &input_img, &args.path, &ico_resolutions);
+    let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(
+        &args.out, &input_img, &args.path, &ico_resolutions, args.tray_resolution
+    );
 
     if args.tray || all_flags{
         app_image_builder.build_tray();

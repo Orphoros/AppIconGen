@@ -44,7 +44,13 @@ appicongen -i -t icon.png
 Optionally, the `-r` flag can be used to specify what resolutions to generate for the ICO file:
 
 ```sh
-appicongen -i -r "16,32,48,256" icon.png
+appicongen -r "16,32,48,256" icon.png
+```
+
+With the `-T` flag, the size of the generated tray icon can be specified:
+
+```sh
+appicongen -T 256 icon.png
 ```
 
 If no input file is specified, AppIconGen will look for a file named `icon.png` in the current directory.
