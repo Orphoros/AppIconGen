@@ -2,6 +2,7 @@ use clap::Parser;
 use image::io::Reader as ImageReader;
 
 mod icon_gen;
+mod macros;
 
 #[derive(Parser, Debug)]
 #[command(name = "appicongen", version, about, after_help = "Make sure that the input PNG image is square and has a resolution of at least 1024x1024 pixels.")]
@@ -48,14 +49,12 @@ fn main() {
         .split(',')
         .map(|s| {
             let element = s.trim();
-            element.parse().map_err(|_| {
-                eprintln!("Warning: Failed to parse the resolution '{}' for ICO, ignoring.", element);
-            })
+            element.parse().map_err(|_| warn!("failed to parse the resolution '{}' for ICO, ignoring", element))
         })
         .filter_map(Result::ok)
         .filter(|&x| {
             if x < 16 || x > 1024 {
-                eprintln!("Warning: The resolution '{}' for ICO is out of bounds (16-1024), ignoring.", x);
+                warn!("the resolution '{}' for ICO is out of bounds (16-1024), ignoring", x);
                 false
             } else {
                 true
@@ -64,40 +63,35 @@ fn main() {
         .collect();
 
     if ico_resolutions.is_empty() {
-        eprintln!("Error: No valid resolutions for ICO were provided.");
-        return;
+        error_exit!("no valid resolutions for ICO were provided");
     }
 
     if args.tray_resolution < 16 || args.tray_resolution > 2048 {
-        eprintln!("Error: The resolution for the tray PNG file is out of bounds (16-2048).");
-        return;
+        error_exit!("the resolution for the tray PNG file is out of bounds (16-2048)");
     }
 
     let img = ImageReader::open(&args.path);
     if img.is_err() {
-        eprintln!("Error: Failed to open the image file '{}'.", args.path);
+        error_exit!("failed to open the image file '{}'", args.path);
     }
 
-    let img = img.expect("Error: Failed to process the image file.");
+    let img = img.unwrap_or_else(|_| error_exit!("failed to process the image file"));
 
     let img = img.decode();
     if img.is_err() {
-        eprintln!("Error: Failed to decode the image file.");
-        return;
+       error_exit!("failed to decode the image file");
     }
 
-    let input_img = img.expect("Error: Failed to decode the image file.");
+    let input_img = img.unwrap_or_else(|_| error_exit!("failed to decode the image file."));
     let img = input_img.to_rgba8();
 
     let (width, height) = img.dimensions();
     if width < 1024 || height < 1024 {
-        eprintln!("Error: The image resolution is too low. It must be at least 1024x1024 pixels.");
-        return;
+        error_exit!("the image resolution is too low. It must be at least 1024x1024 pixels");
     }
 
     if width != height {
-        eprintln!("Error: The image is not square.");
-        return;
+        error_exit!("the image is not square");
     }
 
     let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(

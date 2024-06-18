@@ -1,3 +1,5 @@
+use crate::error_exit;
+
 use super::definition::AppIconGenerator;
 
 impl AppIconGenerator<'_> {
@@ -12,6 +14,6 @@ impl AppIconGenerator<'_> {
             }
         }
         let path = format!("{}_tray.png", self.out);
-        resized.save(path).expect("Failed to save tray PNG image.");
+        resized.save(path).unwrap_or_else(|_| error_exit!("failed to save tray PNG image"));
     }
 }
