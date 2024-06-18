@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 
 use icns::IconType;
-use image::DynamicImage;
 
-use super::definition::AppIconGenerator;
+use super::{definition::AppIconGenerator, ImageSet};
 
 impl AppIconGenerator<'_> {
     pub fn generate_images(&mut self) {
-        let mut icns_images: HashMap<IconType, DynamicImage> = HashMap::new();
+        let mut icns_images: ImageSet = HashMap::new();
         for size in &[16, 32, 64, 128, 256, 512, 1024] {
             let resized = self.input_img.resize(*size, *size, image::imageops::FilterType::Lanczos3);
             let icon_type = match size {

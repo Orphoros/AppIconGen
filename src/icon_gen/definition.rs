@@ -1,13 +1,12 @@
-use std::collections::HashMap;
-
-use icns::IconType;
 use image::DynamicImage;
+
+use super::ImageSet;
 
 pub struct AppIconGenerator<'a> {
     pub out: &'a str,
     pub input_img: &'a DynamicImage,
     pub input_file: &'a str,
-    pub icns_images: Option<HashMap<IconType, DynamicImage>>,
+    pub icns_images: Option<ImageSet>,
 }
 
 impl<'a> AppIconGenerator<'a> {
