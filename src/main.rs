@@ -38,10 +38,10 @@ fn main() {
 
     let img = ImageReader::open(&args.path);
     if img.is_err() {
-        eprintln!("Error: Failed to open the image file.");
+        eprintln!("Error: Failed to open the image file '{}'.", args.path);
     }
 
-    let img = img.unwrap();
+    let img = img.expect("Error: Failed to process the image file.");
 
     let img = img.decode();
     if img.is_err() {
@@ -49,7 +49,7 @@ fn main() {
         return;
     }
 
-    let input_img = img.unwrap();
+    let input_img = img.expect("Error: Failed to decode the image file.");
     let img = input_img.to_rgba8();
 
     let (width, height) = img.dimensions();

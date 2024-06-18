@@ -12,6 +12,6 @@ impl AppIconGenerator<'_> {
             }
         }
         let path = format!("{}_tray.png", self.out);
-        resized.save(path).unwrap();
+        resized.save(path).expect("Failed to save tray PNG image.");
     }
 }

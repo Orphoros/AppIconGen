@@ -39,7 +39,7 @@ impl AppIconGenerator<'_> {
         if self.icns_images.is_none() {
             self.generate_images();
         }
-        for (icon_type, img) in self.icns_images.as_ref().unwrap().iter() {
+        for (icon_type, img) in self.icns_images.as_ref().expect("Image set not yet generated.").iter() {
             let type_name = match icon_type {
                 IconType::RGBA32_16x16 => "16x16",
                 IconType::RGBA32_32x32 => "32x32",
@@ -54,7 +54,7 @@ impl AppIconGenerator<'_> {
                 _ => "unknown"
             };
             let path = format!("{}_{}.png", self.out, type_name);
-            img.save(path).unwrap();
+            img.save(path).expect(&format!("Failed to dump image '{}' to disk.", type_name));
         }
     }
 }
