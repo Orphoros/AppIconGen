@@ -18,6 +18,10 @@ struct Args {
     #[arg(short = 'I', long, default_value = "false")]
     icns: bool,
 
+    /// List of resolutions for the ICO file
+    #[arg(short = 'r', long, default_value = "16,32,48,96,256")]
+    ico_resolutions: String,
+
     /// Dump all the generated image file sizes
     #[arg(short, long, default_value = "false")]
     dump: bool,
@@ -35,6 +39,30 @@ fn main() {
     let args = Args::parse();
 
     let all_flags = !args.ico && !args.icns && !args.dump && !args.tray;
+
+    let ico_resolutions: Vec<u32> = args.ico_resolutions
+        .split(',')
+        .map(|s| {
+            let element = s.trim();
+            element.parse().map_err(|_| {
+                eprintln!("Warning: Failed to parse the resolution '{}' for ICO, ignoring.", element);
+            })
+        })
+        .filter_map(Result::ok)
+        .filter(|&x| {
+            if x < 16 || x > 1024 {
+                eprintln!("Warning: The resolution '{}' for ICO is out of bounds (16-1024), ignoring.", x);
+                false
+            } else {
+                true
+            }
+        })
+        .collect();
+
+    if ico_resolutions.is_empty() {
+        eprintln!("Error: No valid resolutions for ICO were provided.");
+        return;
+    }
 
     let img = ImageReader::open(&args.path);
     if img.is_err() {
@@ -63,7 +91,7 @@ fn main() {
         return;
     }
 
-    let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(&args.out, &input_img, &args.path);
+    let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(&args.out, &input_img, &args.path, &ico_resolutions);
 
     if args.tray || all_flags{
         app_image_builder.build_tray();
