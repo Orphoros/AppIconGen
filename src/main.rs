@@ -71,8 +71,8 @@ fn main() {
         error_exit!("no valid resolutions for ICO were provided");
     }
 
-    if args.tray_resolution < 16 || args.tray_resolution > 2048 {
-        error_exit!("the resolution for the tray PNG file is out of bounds (16-2048)");
+    if args.tray_resolution < 1 || args.tray_resolution > 256 {
+        error_exit!("the resolution for the tray PNG file is out of bounds (1-256)");
     }
 
     let img = ImageReader::open(&args.path);
