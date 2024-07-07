@@ -91,12 +91,17 @@ fn main() {
     let img = input_img.to_rgba8();
 
     let (width, height) = img.dimensions();
-    if width < 1024 || height < 1024 {
-        error_exit!("the image resolution is too low. It must be at least 1024x1024 pixels");
-    }
 
     if width != height {
         error_exit!("the image is not square");
+    }
+
+    if width < 1024 {
+        error_exit!("the image resolution is too low. It must be at least 1024x1024 pixels");
+    }
+
+    if width < args.tray_resolution {
+        error_exit!("the resolution for the tray PNG file ({}) is higher than the input image resolution ({})", args.tray_resolution, width);
     }
 
     let mut app_image_builder = icon_gen::definition::AppIconGenerator::new(
